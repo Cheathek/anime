@@ -2,16 +2,21 @@ import React, { useState, useEffect } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { useQuery } from "react-query";
 import { searchAnime } from "../services/api";
-import { Search, ArrowLeft, ArrowRight } from "lucide-react";
+import { Search, ArrowLeft } from "lucide-react";
+import Pagination from "../components/Pagination";
 import AnimeCard from "../components/AnimeCard";
 import LoadingSkeleton from "../components/LoadingSkeleton";
-import { cn } from "../utils/helpers";
+// import { cn } from "../utils/helpers";
 
 const SearchResults: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const query = searchParams.get("q") || "";
   const pageParam = searchParams.get("page");
   const [page, setPage] = useState(pageParam ? parseInt(pageParam) : 1);
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+  };
 
   // Update page when URL changes
   useEffect(() => {
@@ -47,15 +52,6 @@ const SearchResults: React.FC = () => {
     if (searchInput.trim()) {
       setSearchParams({ q: searchInput.trim(), page: "1" });
     }
-  };
-
-  // Pagination handlers
-  const goToPage = (newPage: number) => {
-    if (newPage < 1) return;
-    if (!hasNextPage && newPage > page) return;
-
-    setSearchParams({ q: query, page: newPage.toString() });
-    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
@@ -136,92 +132,12 @@ const SearchResults: React.FC = () => {
                 ))}
               </div>
 
-              {/* Pagination */}
-              <div className="mt-8 flex justify-center">
-                <nav className="flex items-center gap-1">
-                  {/* Previous Page Button */}
-                  <button
-                    onClick={() => goToPage(page - 1)}
-                    disabled={page === 1}
-                    className={cn(
-                      "flex h-10 w-10 items-center justify-center rounded-full transition-colors",
-                      page === 1
-                        ? "cursor-not-allowed text-gray-400 dark:text-gray-600"
-                        : "hover:bg-gray-100 dark:hover:bg-gray-800"
-                    )}
-                    aria-label="Previous page"
-                  >
-                    <ArrowLeft size={18} />
-                  </button>
-
-                  {/* First Page */}
-                  {page > 2 && (
-                    <button
-                      onClick={() => goToPage(1)}
-                      className="flex h-10 w-10 items-center justify-center rounded-full text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800"
-                    >
-                      1
-                    </button>
-                  )}
-
-                  {/* Ellipsis */}
-                  {page > 3 && (
-                    <span className="flex h-10 w-10 items-center justify-center">
-                      ...
-                    </span>
-                  )}
-
-                  {/* Previous Page */}
-                  {page > 1 && (
-                    <button
-                      onClick={() => goToPage(page - 1)}
-                      className="flex h-10 w-10 items-center justify-center rounded-full text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800"
-                    >
-                      {page - 1}
-                    </button>
-                  )}
-
-                  {/* Current Page */}
-                  <button
-                    className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-600 text-sm font-medium text-white dark:bg-primary-500"
-                    aria-current="page"
-                  >
-                    {page}
-                  </button>
-
-                  {/* Next Page */}
-                  {hasNextPage && (
-                    <button
-                      onClick={() => goToPage(page + 1)}
-                      className="flex h-10 w-10 items-center justify-center rounded-full text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800"
-                    >
-                      {page + 1}
-                    </button>
-                  )}
-
-                  {/* Ellipsis */}
-                  {hasNextPage && (
-                    <span className="flex h-10 w-10 items-center justify-center">
-                      ...
-                    </span>
-                  )}
-
-                  {/* Next Page Button */}
-                  <button
-                    onClick={() => goToPage(page + 1)}
-                    disabled={!hasNextPage}
-                    className={cn(
-                      "flex h-10 w-10 items-center justify-center rounded-full transition-colors",
-                      !hasNextPage
-                        ? "cursor-not-allowed text-gray-400 dark:text-gray-600"
-                        : "hover:bg-gray-100 dark:hover:bg-gray-800"
-                    )}
-                    aria-label="Next page"
-                  >
-                    <ArrowRight size={18} />
-                  </button>
-                </nav>
-              </div>
+              <Pagination
+                currentPage={page}
+                hasNextPage={hasNextPage}
+                onPageChange={handlePageChange}
+                className="mt-12"
+              />
             </>
           )}
         </div>

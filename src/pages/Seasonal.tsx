@@ -5,19 +5,21 @@ import { ArrowLeft, ChevronDown } from "lucide-react";
 import { getSeasonalAnime } from "../services/api";
 import AnimeCard from "../components/AnimeCard";
 import LoadingSkeleton from "../components/LoadingSkeleton";
+import Pagination from "../components/Pagination";
 import { cn } from "../utils/helpers";
 
 const Seasonal: React.FC = () => {
   const currentYear = new Date().getFullYear();
   const [year, setYear] = useState(currentYear);
   const [season, setSeason] = useState("now");
+  const [page, setPage] = useState(1); // Add page state
   const [isYearDropdownOpen, setIsYearDropdownOpen] = useState(false);
   const [isSeasonDropdownOpen, setIsSeasonDropdownOpen] = useState(false);
 
   const yearDropdownRef = useRef<HTMLDivElement>(null);
   const seasonDropdownRef = useRef<HTMLDivElement>(null);
 
-  // This will automatically refetch when year or season changes
+  // This will automatically refetch when year, season, or page changes
   const { data, isLoading, isFetching } = useQuery(
     ["seasonal", year, season], // Query key includes year and season
     () => getSeasonalAnime(year, season, 24),
@@ -26,6 +28,8 @@ const Seasonal: React.FC = () => {
       staleTime: 1000 * 60 * 5, // 5 minutes
     }
   );
+
+  const hasNextPage = data?.pagination?.has_next_page || false;
 
   // Close dropdowns when clicking outside
   useEffect(() => {
@@ -49,6 +53,11 @@ const Seasonal: React.FC = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  // Reset page to 1 when filters change
+  useEffect(() => {
+    setPage(1);
+  }, [year, season]);
 
   const animeList = data?.data || [];
 
@@ -78,6 +87,11 @@ const Seasonal: React.FC = () => {
   const handleYearChange = (newYear: number) => {
     setYear(newYear);
     setIsYearDropdownOpen(false);
+  };
+
+  // Handle page change
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
   };
 
   return (
@@ -188,11 +202,23 @@ const Seasonal: React.FC = () => {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
-            {animeList.map((anime) => (
-              <AnimeCard key={anime.mal_id} anime={anime} size="sm" />
-            ))}
-          </div>
+          <>
+            <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
+              {animeList.map((anime) => (
+                <AnimeCard key={anime.mal_id} anime={anime} size="sm" />
+              ))}
+            </div>
+
+            {/* Pagination - moved outside the grid */}
+            <Pagination
+              currentPage={page}
+              hasNextPage={hasNextPage}
+              onPageChange={handlePageChange}
+              className="mt-12"
+              showFirstLast={true}
+              totalPages={data?.pagination?.last_visible_page} // ← Make sure this has a value
+            />
+          </>
         )}
       </div>
     </div>

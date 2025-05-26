@@ -59,6 +59,8 @@ const Popular: React.FC = () => {
               hasNextPage={hasNextPage}
               onPageChange={handlePageChange}
               className="mt-12"
+              showFirstLast={true}
+              totalPages={data?.pagination?.last_visible_page}
             />
           </>
         )}
