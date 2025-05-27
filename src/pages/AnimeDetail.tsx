@@ -4,8 +4,8 @@ import { useQuery } from "react-query";
 import RelatedAnimeCards from "../components/RelatedAnimeCards";
 
 import {
-  ArrowLeft,
   Calendar,
+  ChevronLeft,
   Clock,
   ExternalLink,
   Monitor,
@@ -124,9 +124,18 @@ const AnimeDetail: React.FC = () => {
         {/* Back button */}
         <Link
           to="/"
-          className="mb-8 inline-flex items-center text-sm text-gray-600 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400"
+          className="mb-8 inline-flex items-center text-sm font-medium text-gray-600 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 group transition-colors"
         >
-          <ArrowLeft size={16} className="mr-1 mt-1" />
+          <span className="relative mr-1 mt-1 inline-block overflow-hidden">
+            <ChevronLeft
+              size={16}
+              className="transition-transform group-hover:-translate-x-1"
+            />
+            <ChevronLeft
+              size={16}
+              className="absolute left-0 top-0 translate-x-4 opacity-0 transition-all group-hover:translate-x-0 group-hover:opacity-100"
+            />
+          </span>
           Back to Home
         </Link>
 

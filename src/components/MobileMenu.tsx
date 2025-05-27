@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { ChevronRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { cn } from "../utils/helpers";
 import { menuItems } from "../constants/navigation";
 
@@ -11,24 +11,21 @@ interface MobileMenuProps {
   theme: string;
 }
 
-const MobileMenu: React.FC<MobileMenuProps> = ({
-  isOpen,
-  onClose,
-}) => {
+const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
   const location = useLocation();
 
   return (
     <>
-      {/* Backdrop */}
+      {/* Backdrop - Enhanced for glassmorphism */}
       <div
         className={cn(
-          "fixed inset-0 bg-black/20 backdrop-blur-sm z-40 md:hidden transition-all duration-300",
+          "fixed inset-0 bg-black/30 backdrop-blur-lg z-40 md:hidden transition-all duration-300",
           isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         )}
         onClick={onClose}
       />
 
-      {/* Menu Panel */}
+      {/* Menu Panel - Glassmorphism style */}
       <div
         className={cn(
           "fixed top-16 left-0 right-0 bottom-0 z-50 md:hidden transition-all duration-300 ease-out",
@@ -37,10 +34,10 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
             : "-translate-y-4 opacity-0 pointer-events-none"
         )}
       >
-        <div className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl shadow-2xl rounded-t-2xl h-full overflow-hidden">
+        <div className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-2xl shadow-2xl border border-white/20 dark:border-gray-700/30 rounded-t-2xl h-full overflow-hidden">
           {/* Header */}
-          <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-            <div className="w-10 h-1 bg-gray-300 dark:bg-gray-600 rounded-full mx-auto" />
+          <div className="px-6 py-4 border-b border-white/20 dark:border-gray-700/30">
+            <div className="w-10 h-1 bg-gray-300/70 dark:bg-gray-600/70 rounded-full mx-auto" />
           </div>
 
           {/* Menu Items */}
@@ -55,8 +52,8 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
                   className={cn(
                     "group flex items-center justify-between p-4 rounded-xl transition-all duration-200 hover:scale-[0.98] active:scale-95",
                     isActive
-                      ? "bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400 shadow-sm"
-                      : "hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200"
+                      ? "bg-primary-50/70 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 shadow-sm border border-primary-100/50 dark:border-primary-800/30"
+                      : "hover:bg-gray-50/60 dark:hover:bg-gray-800/40 text-gray-700 dark:text-gray-200 border border-transparent hover:border-gray-200/40 dark:hover:border-gray-700/30"
                   )}
                   onClick={onClose}
                   style={{
@@ -69,10 +66,10 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
                   <div className="flex items-center gap-4">
                     <div
                       className={cn(
-                        "p-2 rounded-lg transition-colors",
+                        "p-2 rounded-lg transition-colors backdrop-blur-sm",
                         isActive
-                          ? "bg-primary-100 dark:bg-primary-800/50 text-primary-600 dark:text-primary-400"
-                          : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 group-hover:bg-gray-200 dark:group-hover:bg-gray-600"
+                          ? "bg-primary-100/60 dark:bg-primary-800/40 text-primary-600 dark:text-primary-400"
+                          : "bg-gray-100/50 dark:bg-gray-700/40 text-gray-600 dark:text-gray-400 group-hover:bg-gray-200/50 dark:group-hover:bg-gray-600/40"
                       )}
                     >
                       {item.icon}
@@ -80,7 +77,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
                     <span className="text-lg font-medium">{item.name}</span>
                   </div>
 
-                  <ChevronRight
+                  <ArrowRight
                     size={20}
                     className={cn(
                       "transition-transform group-hover:translate-x-1",
@@ -90,19 +87,18 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
                 </Link>
               );
             })}
-
           </nav>
 
-          {/* Footer */}
-          <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50">
-            <p className="text-center text-sm text-gray-500 dark:text-gray-400">
+          {/* Footer - Glassmorphism style */}
+          <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-white/20 dark:border-gray-700/30 bg-white/30 dark:bg-gray-800/30 backdrop-blur-lg">
+            <p className="text-center text-sm text-gray-600/80 dark:text-gray-400/80">
               AnimePulse • Discover Amazing Anime
             </p>
           </div>
         </div>
       </div>
 
-      {/* Add custom CSS for animations */}
+      {/* Animation styles */}
       <style>{`
         @keyframes slideInFromRight {
           from {

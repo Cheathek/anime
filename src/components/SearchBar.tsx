@@ -117,7 +117,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
                 value={searchQuery}
                 onChange={handleInputChange}
                 onFocus={() => setShowSuggestions(searchQuery.length > 1)}
-                className="flex-grow h-full capitalize bg-transparent text-gray-200 placeholder-gray-500 focus:outline-none text-sm pr-2"
+                className="flex-grow h-full capitalize bg-transparent text-gray-200 placeholder-gray-500 focus:outline-none text-md pr-2"
                 autoFocus
               />
               {/* Close Button - Styled like image's right section but with X */}

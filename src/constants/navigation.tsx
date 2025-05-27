@@ -1,4 +1,4 @@
-import { Home, TrendingUp, Calendar } from "lucide-react";
+import { Home, CalendarClock, Upload } from "lucide-react";
 
 export const menuItems = [
   { 
@@ -9,11 +9,11 @@ export const menuItems = [
   { 
     path: "/top-airing", 
     name: "Top Airing", 
-    icon: <TrendingUp size={20} /> 
+    icon: <Upload size={20} /> 
   },
   { 
     path: "/seasonal", 
     name: "Current Season", 
-    icon: <Calendar size={20} /> 
+    icon: <CalendarClock size={20} /> 
   },
 ];

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { useQuery } from "react-query";
 import { searchAnime } from "../services/api";
-import { Search, ArrowLeft } from "lucide-react";
+import { Search, ChevronLeft } from "lucide-react";
 import Pagination from "../components/Pagination";
 import AnimeCard from "../components/AnimeCard";
 import LoadingSkeleton from "../components/LoadingSkeleton";
@@ -66,9 +66,18 @@ const SearchResults: React.FC = () => {
         {/* Back link */}
         <Link
           to="/"
-          className="mb-8 inline-flex items-center text-sm text-gray-600 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400"
+          className="mb-8 inline-flex items-center text-sm font-medium text-gray-600 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 group transition-colors"
         >
-          <ArrowLeft size={16} className="mr-1 mt-1" />
+          <span className="relative mr-1 mt-1 inline-block overflow-hidden">
+            <ChevronLeft
+              size={16}
+              className="transition-transform group-hover:-translate-x-1"
+            />
+            <ChevronLeft
+              size={16}
+              className="absolute left-0 top-0 translate-x-4 opacity-0 transition-all group-hover:translate-x-0 group-hover:opacity-100"
+            />
+          </span>
           Back to Home
         </Link>
 
