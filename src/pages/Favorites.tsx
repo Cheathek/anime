@@ -1,19 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 // import { useQuery } from 'react-query';
-import { Link } from 'react-router-dom';
-import { Heart, ArrowLeft } from 'lucide-react';
+import { Link } from "react-router-dom";
+import { Heart, ChevronLeft } from "lucide-react";
 
-import { useFavorites } from '../hooks/useFavorites'; // Adjust path as needed
-import { getAnimeById } from '../services/api'; // Adjust path as needed
-import AnimeCard from '../components/AnimeCard'; // Use the updated AnimeCard
-import LoadingSkeleton from '../components/LoadingSkeleton'; // Assuming this exists
-import type { AnimeDetailResponse } from '../types/anime'; // Assuming this type exists
+import { useFavorites } from "../hooks/useFavorites"; // Adjust path as needed
+import { getAnimeById } from "../services/api"; // Adjust path as needed
+import AnimeCard from "../components/AnimeCard"; // Use the updated AnimeCard
+import LoadingSkeleton from "../components/LoadingSkeleton"; // Assuming this exists
+import type { AnimeDetailResponse } from "../types/anime"; // Assuming this type exists
 
 const Favorites: React.FC = () => {
   const { favoriteIds } = useFavorites();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [favoriteAnimeDetails, setFavoriteAnimeDetails] = useState<AnimeDetailResponse['data'][]>([]);
+  const [favoriteAnimeDetails, setFavoriteAnimeDetails] = useState<
+    AnimeDetailResponse["data"][]
+  >([]);
 
   useEffect(() => {
     const fetchAllFavorites = async () => {
@@ -25,7 +27,7 @@ const Favorites: React.FC = () => {
 
       setIsLoading(true);
       setError(null);
-      const results: AnimeDetailResponse['data'][] = [];
+      const results: AnimeDetailResponse["data"][] = [];
       let fetchError = false;
 
       // Fetch details sequentially using the rate-limited getAnimeById
@@ -49,7 +51,9 @@ const Favorites: React.FC = () => {
 
       setFavoriteAnimeDetails(results);
       if (fetchError) {
-        setError('Failed to fetch some favorite anime details. Please try refreshing.');
+        setError(
+          "Failed to fetch some favorite anime details. Please try refreshing."
+        );
       }
       setIsLoading(false);
     };
@@ -63,13 +67,24 @@ const Favorites: React.FC = () => {
         {/* Back link */}
         <Link
           to="/"
-          className="mb-8 inline-flex items-center text-sm text-gray-600 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 transition-colors"
+          className="mb-8 inline-flex items-center text-sm font-medium text-gray-600 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 group transition-colors"
         >
-          <ArrowLeft size={16} className="mr-1" />
+          <span className="relative mr-1 mt-1 inline-block overflow-hidden">
+            <ChevronLeft
+              size={16}
+              className="transition-transform group-hover:-translate-x-1"
+            />
+            <ChevronLeft
+              size={16}
+              className="absolute left-0 top-0 translate-x-4 opacity-0 transition-all group-hover:translate-x-0 group-hover:opacity-100"
+            />
+          </span>
           Back to Home
         </Link>
 
-        <h1 className="mb-6 text-2xl font-semibold md:text-3xl">Your Favorites</h1>
+        <h1 className="mb-6 text-2xl font-semibold md:text-3xl">
+          Your Favorites
+        </h1>
 
         {isLoading ? (
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
@@ -84,7 +99,10 @@ const Favorites: React.FC = () => {
           </div>
         ) : favoriteAnimeDetails.length === 0 ? (
           <div className="my-12 text-center">
-            <Heart className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" strokeWidth={1} />
+            <Heart
+              className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500"
+              strokeWidth={1}
+            />
             <h3 className="mt-4 text-xl font-medium">No favorites yet</h3>
             <p className="mt-2 text-gray-600 dark:text-gray-400">
               Click the heart icon on an anime card to save it here.
@@ -104,4 +122,3 @@ const Favorites: React.FC = () => {
 };
 
 export default Favorites;
-

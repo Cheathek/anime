@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { ChevronLeft, Moon, Sun } from "lucide-react";
+import { ChevronLeft, Heart, Moon, Sun } from "lucide-react";
 import { useTheme } from "../context/ThemeContext";
 import { cn } from "../utils/helpers";
 import SearchBar from "./SearchBar";
@@ -105,6 +105,19 @@ const Header: React.FC<HeaderProps> = ({
                   )}
                 />
               </div>
+            </button>
+
+            {/* favorite button disable for mobile */}
+            <button
+              onClick={() => navigate("/favorites")}
+              className="relative hidden md:flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              aria-label="View favorites"
+            >
+              <span className="sr-only">Favorites</span>
+              <Heart
+                size={20}
+                className="text-red-500 dark:text-red-500 transition-colors"
+              />
             </button>
 
             {/* Desktop Search */}

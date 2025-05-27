@@ -1,3 +1,4 @@
+//hooks/useFavorites.ts
 import { useState, useEffect, useCallback } from 'react';
 
 const FAVORITES_KEY = 'favoriteAnimeIds';
