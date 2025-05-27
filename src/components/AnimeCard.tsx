@@ -19,7 +19,7 @@ const AnimeCard: React.FC<AnimeCardProps> = ({
   const [isHovered, setIsHovered] = useState(false);
   // Use the favorites hook
   const { addFavorite, removeFavorite, isFavorite } = useFavorites();
-  
+
   // Determine if the current anime is favorited
   const isCurrentlyFavorite = isFavorite(anime.mal_id);
 
@@ -82,7 +82,9 @@ const AnimeCard: React.FC<AnimeCardProps> = ({
           <button
             className="absolute right-2 top-2 z-10 rounded-full p-1.5 backdrop-blur-sm transition-all hover:scale-110 bg-black/30 hover:bg-black/50"
             onClick={handleFavoriteToggle} // Use the new handler
-            aria-label={isCurrentlyFavorite ? "Remove from favorites" : "Add to favorites"}
+            aria-label={
+              isCurrentlyFavorite ? "Remove from favorites" : "Add to favorites"
+            }
           >
             <Heart
               className={cn(
@@ -182,4 +184,3 @@ const AnimeCard: React.FC<AnimeCardProps> = ({
 };
 
 export default AnimeCard;
-

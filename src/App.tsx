@@ -9,6 +9,7 @@ import TopAiring from "./pages/TopAiring";
 import Seasonal from "./pages/Seasonal";
 import Popular from "./pages/Popular";
 import Latest from "./pages/Latest";
+import Favorites from "./pages/Favorites";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             <Route path="/latest" element={<Latest />} />
             <Route path="/popular" element={<Popular />} />
             <Route path="/seasonal" element={<Seasonal />} />
+            <Route path="/favorites" element={<Favorites />} />
           </Routes>
         </div>
         <Footer />
