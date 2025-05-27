@@ -9,22 +9,20 @@ import { cn } from "../utils/helpers";
 
 interface PaginationProps {
   currentPage: number;
-  totalPages?: number;
-  hasNextPage?: boolean;
+  hasNextPage: boolean;
   onPageChange: (page: number) => void;
   className?: string;
   showFirstLast?: boolean;
-  maxVisiblePages?: number;
+  totalPages?: number;
 }
 
 const Pagination: React.FC<PaginationProps> = ({
   currentPage,
-  totalPages,
-  hasNextPage = false,
+  hasNextPage,
   onPageChange,
   className,
   showFirstLast = true, // Changed back to true to show first/last buttons
-  maxVisiblePages = 3, // Reduced for better mobile experience
+  totalPages,
 }) => {
   // If totalPages is not provided, use hasNextPage for infinite pagination
   const isInfinite = !totalPages;
@@ -56,22 +54,22 @@ const Pagination: React.FC<PaginationProps> = ({
     }
 
     // For known total pages
-    if (actualTotalPages <= maxVisiblePages) {
+    if (actualTotalPages <= 3) {
       return Array.from({ length: actualTotalPages }, (_, i) => i + 1);
     }
 
     const pages = [];
-    const halfVisible = Math.floor(maxVisiblePages / 2);
+    const halfVisible = Math.floor(3 / 2);
 
     let start = Math.max(1, currentPage - halfVisible);
     let end = Math.min(actualTotalPages, currentPage + halfVisible);
 
     // Adjust if we're near the beginning or end
-    if (end - start + 1 < maxVisiblePages) {
+    if (end - start + 1 < 3) {
       if (start === 1) {
-        end = Math.min(actualTotalPages, start + maxVisiblePages - 1);
+        end = Math.min(actualTotalPages, start + 3 - 1);
       } else {
-        start = Math.max(1, end - maxVisiblePages + 1);
+        start = Math.max(1, end - 3 + 1);
       }
     }
 
@@ -97,7 +95,7 @@ const Pagination: React.FC<PaginationProps> = ({
         {showFirstLast &&
           !isInfinite &&
           totalPages &&
-          totalPages > maxVisiblePages &&
+          totalPages > 3 &&
           currentPage > 1 && (
             <button
               onClick={() => goToPage(1)}
@@ -181,7 +179,7 @@ const Pagination: React.FC<PaginationProps> = ({
         {showFirstLast &&
           !isInfinite &&
           totalPages &&
-          totalPages > maxVisiblePages &&
+          totalPages > 3 &&
           currentPage < totalPages && (
             <button
               onClick={() => goToPage(totalPages)}

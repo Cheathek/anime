@@ -119,7 +119,6 @@ const Header: React.FC<HeaderProps> = ({
                 showMobileSearch={showMobileSearch}
                 onToggle={handleSearchToggle}
               />
-              
 
               {/* Enhanced Animated Hamburger Menu */}
               <button

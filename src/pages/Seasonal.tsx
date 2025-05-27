@@ -216,7 +216,7 @@ const Seasonal: React.FC = () => {
               onPageChange={handlePageChange}
               className="mt-12"
               showFirstLast={true}
-              totalPages={data?.pagination?.last_visible_page} // ← Make sure this has a value
+              totalPages={data?.pagination?.last_visible_page}
             />
           </>
         )}
