@@ -6,7 +6,6 @@ import { Search, ArrowLeft } from "lucide-react";
 import Pagination from "../components/Pagination";
 import AnimeCard from "../components/AnimeCard";
 import LoadingSkeleton from "../components/LoadingSkeleton";
-// import { cn } from "../utils/helpers";
 
 const SearchResults: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -16,6 +15,11 @@ const SearchResults: React.FC = () => {
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
+    // Update URL when page changes
+    setSearchParams({
+      q: query,
+      page: newPage.toString(),
+    });
   };
 
   // Update page when URL changes
@@ -27,7 +31,7 @@ const SearchResults: React.FC = () => {
     }
   }, [pageParam]);
 
-  // Fetch search results
+  // Fetch search results with proper typing
   const { data, isLoading, isError } = useQuery(
     ["search", query, page],
     () => searchAnime(query, page),
@@ -39,6 +43,7 @@ const SearchResults: React.FC = () => {
 
   const results = data?.data || [];
   const hasNextPage = data?.pagination?.has_next_page || false;
+  const totalPages = (data?.pagination as any)?.last_visible_page || 1;
 
   // Handle search form submission
   const [searchInput, setSearchInput] = useState(query);
@@ -51,6 +56,7 @@ const SearchResults: React.FC = () => {
     e.preventDefault();
     if (searchInput.trim()) {
       setSearchParams({ q: searchInput.trim(), page: "1" });
+      setPage(1);
     }
   };
 
@@ -127,19 +133,22 @@ const SearchResults: React.FC = () => {
           ) : (
             <>
               <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
-                {results.map((anime) => (
+                {results.map((anime: any) => (
                   <AnimeCard key={anime.mal_id} anime={anime} size="sm" />
                 ))}
               </div>
 
-              <Pagination
-                currentPage={page}
-                hasNextPage={hasNextPage}
-                onPageChange={handlePageChange}
-                className="mt-12"
-                showFirstLast={true}
-                totalPages={data?.pagination?.last_visible_page || 1}
-              />
+              {/* Only show pagination if there are results */}
+              {results.length > 0 && (
+                <Pagination
+                  currentPage={page}
+                  hasNextPage={hasNextPage}
+                  onPageChange={handlePageChange}
+                  className="mt-12"
+                  showFirstLast={true}
+                  totalPages={totalPages}
+                />
+              )}
             </>
           )}
         </div>
