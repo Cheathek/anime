@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Star, Heart } from "lucide-react";
+import { Star, Bookmark } from "lucide-react";
 import { cn } from "../utils/helpers"; // Assuming this helper exists
 import type { Anime } from "../types/anime"; // Assuming this type exists
 import { useFavorites } from "../hooks/useFavorites"; // Import the custom hook
@@ -86,11 +86,11 @@ const AnimeCard: React.FC<AnimeCardProps> = ({
               isCurrentlyFavorite ? "Remove from favorites" : "Add to favorites"
             }
           >
-            <Heart
+            <Bookmark
               className={cn(
                 "h-5 w-5 transition-all duration-300",
                 isCurrentlyFavorite
-                  ? "fill-red-500 text-red-500" // Style for favorited state
+                  ? "fill-yellow-400 text-yellow-400" // Style for favorited state
                   : "fill-none text-gray-300 hover:text-white" // Style for non-favorited state
               )}
               strokeWidth={isCurrentlyFavorite ? 0 : 2} // No stroke when filled

@@ -9,7 +9,7 @@ const Footer: React.FC = () => {
           <div className="text-sm text-gray-600 dark:text-gray-400">
             <p>AnimePulse © {new Date().getFullYear()}. All rights reserved.</p>
             <p className="mt-1">
-              Powered by <a href="https://jikan.moe/" target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:underline dark:text-primary-400">Jikan API</a>.
+              Powered by <a href="https://jikan.moe/" target="_blank" rel="noopener noreferrer" className="font-mono text-primary-600 hover:underline dark:text-primary-400">Jikan API</a>.
               This is not affiliated with MyAnimeList.
             </p>
           </div>

@@ -1,4 +1,4 @@
-import { Home, CalendarClock, Upload, Heart } from "lucide-react";
+import { Home, CalendarClock, Upload, Bookmark } from "lucide-react";
 
 export const menuItems = [
   { 
@@ -22,7 +22,7 @@ export const menuItems = [
   {
     path: "/favorites",
     name: "Favorites",
-    icon: <Heart size={20} className="text-red-500" />,
-    activeColor: "text-red-500"
+    icon: <Bookmark size={20} className="text-yellow-500" />,
+    activeColor: "text-yellow-500"
   }
 ];

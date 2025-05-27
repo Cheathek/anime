@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { ChevronLeft, Heart, Moon, Sun } from "lucide-react";
+import { ChevronLeft, Bookmark, Moon, Sun } from "lucide-react";
 import { useTheme } from "../context/ThemeContext";
 import { cn } from "../utils/helpers";
 import SearchBar from "./SearchBar";
@@ -114,9 +114,9 @@ const Header: React.FC<HeaderProps> = ({
               aria-label="View favorites"
             >
               <span className="sr-only">Favorites</span>
-              <Heart
+              <Bookmark
                 size={20}
-                className="text-red-500 dark:text-red-500 transition-colors"
+                className="text-gray-400 dark:text-gray-400 transition-colors"
               />
             </button>
 
