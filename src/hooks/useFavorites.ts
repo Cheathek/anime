@@ -1,85 +1,56 @@
-//hooks/useFavorites.ts
+// src/hooks/useFavorites.ts
 import { useState, useEffect, useCallback } from 'react';
 
 const FAVORITES_KEY = 'favoriteAnimeIds';
 
-/**
- * Reads favorite anime IDs from Local Storage.
- * @returns {number[]} Array of favorite anime IDs.
- */
-const getFavoritesFromStorage = (): number[] => {
-  try {
-    const storedFavorites = localStorage.getItem(FAVORITES_KEY);
-    return storedFavorites ? JSON.parse(storedFavorites) : [];
-  } catch (error) {
-    console.error('Error reading favorites from local storage:', error);
-    return [];
-  }
-};
-
-/**
- * Writes favorite anime IDs to Local Storage.
- * @param {number[]} favorites Array of favorite anime IDs.
- */
-const saveFavoritesToStorage = (favorites: number[]): void => {
-  try {
-    localStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites));
-  } catch (error) {
-    console.error('Error saving favorites to local storage:', error);
-  }
-};
-
-/**
- * Custom hook to manage favorite anime IDs using Local Storage.
- * Provides the list of favorite IDs and functions to add/remove favorites.
- */
 export const useFavorites = () => {
-  // Initialize state directly from local storage
-  const [favoriteIds, setFavoriteIds] = useState<number[]>(getFavoritesFromStorage);
+  const [favoriteIds, setFavoriteIds] = useState<number[]>(() => {
+    try {
+      const stored = localStorage.getItem(FAVORITES_KEY);
+      return stored ? JSON.parse(stored) : [];
+    } catch {
+      return [];
+    }
+  });
 
-  // Effect to update local storage whenever favoriteIds state changes
-  // This ensures consistency if the state is updated from multiple places (though unlikely here)
+  const [pendingFetches, setPendingFetches] = useState<Record<number, boolean>>({});
+
+  // Save to localStorage whenever favorites change
   useEffect(() => {
-    saveFavoritesToStorage(favoriteIds);
+    localStorage.setItem(FAVORITES_KEY, JSON.stringify(favoriteIds));
   }, [favoriteIds]);
 
-  /**
-   * Adds an anime ID to the favorites list.
-   * @param {number} animeId The ID of the anime to add.
-   */
   const addFavorite = useCallback((animeId: number) => {
-    setFavoriteIds((prevFavorites) => {
-      // Avoid duplicates
-      if (prevFavorites.includes(animeId)) {
-        return prevFavorites;
-      }
-      const updatedFavorites = [...prevFavorites, animeId];
-      // Note: The useEffect above handles saving to storage
-      return updatedFavorites;
+    setFavoriteIds(prev => {
+      if (prev.includes(animeId)) return prev;
+      return [...prev, animeId];
     });
+    setPendingFetches(prev => ({ ...prev, [animeId]: true }));
   }, []);
 
-  /**
-   * Removes an anime ID from the favorites list.
-   * @param {number} animeId The ID of the anime to remove.
-   */
   const removeFavorite = useCallback((animeId: number) => {
-    setFavoriteIds((prevFavorites) => {
-      const updatedFavorites = prevFavorites.filter((id) => id !== animeId);
-      // Note: The useEffect above handles saving to storage
-      return updatedFavorites;
+    setFavoriteIds(prev => prev.filter(id => id !== animeId));
+    setPendingFetches(prev => ({ ...prev, [animeId]: false }));
+  }, []);
+
+  const markFetched = useCallback((animeId: number) => {
+    setPendingFetches(prev => {
+      const newState = { ...prev };
+      delete newState[animeId];
+      return newState;
     });
   }, []);
 
-  /**
-   * Checks if an anime ID is in the favorites list.
-   * @param {number} animeId The ID of the anime to check.
-   * @returns {boolean} True if the anime is a favorite, false otherwise.
-   */
-  const isFavorite = useCallback((animeId: number): boolean => {
+  const isFavorite = useCallback((animeId: number) => {
     return favoriteIds.includes(animeId);
   }, [favoriteIds]);
 
-  return { favoriteIds, addFavorite, removeFavorite, isFavorite };
+  return {
+    favoriteIds,
+    pendingFetches,
+    addFavorite,
+    removeFavorite,
+    markFetched,
+    isFavorite
+  };
 };
-
